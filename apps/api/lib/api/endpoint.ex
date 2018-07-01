@@ -36,6 +36,8 @@ defmodule Api.Endpoint do
     key: "_api_key",
     signing_salt: "DDeVgsBg"
 
+  plug CORSPlug
+
   plug Api.Router
 
   @doc """
