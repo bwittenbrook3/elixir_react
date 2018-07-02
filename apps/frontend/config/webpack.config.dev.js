@@ -33,7 +33,8 @@ module.exports = {
   devtool: 'cheap-module-source-map',
 
   devServer: {
-    // stats: 'minimal',
+    stats: 'minimal',
+    open: true,
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
