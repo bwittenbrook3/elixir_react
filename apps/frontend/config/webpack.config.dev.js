@@ -33,7 +33,27 @@ module.exports = {
   devtool: 'cheap-module-source-map',
 
   devServer: {
-    stats: 'minimal',
+    stats: {
+      assets: true,
+      assetsSort: "!size",
+
+      // Add build date and time information
+      builtAt: true,
+
+      // Add information about cached (not built) modules
+      cached: true,
+
+      // Show cached assets (setting this to `false` only shows emitted files)
+      cachedAssets: true,
+
+      // Add children information
+      children: true,
+
+      // Add chunk information (setting this to `false` allows for a less verbose output)
+      chunks: false,
+      entrypoints: false,
+      modules: false,
+    },
     open: true,
     proxy: {
       '/api': {
