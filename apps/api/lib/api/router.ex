@@ -5,10 +5,9 @@ defmodule Api.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api" do
+  scope "/", Api do
     pipe_through :api
 
-
-    get "/ping", Api.PingController, :ping
+    get "/ping", PingController, :ping
   end
 end

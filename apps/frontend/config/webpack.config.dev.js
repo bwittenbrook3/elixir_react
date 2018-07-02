@@ -1,5 +1,7 @@
 'use strict';
 
+process.env.NODE_ENV = 'development';
+
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
@@ -14,7 +16,7 @@ const paths = require('./paths');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-const publicPath = '/';
+const publicPath = '';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
@@ -29,6 +31,17 @@ module.exports = {
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
   devtool: 'cheap-module-source-map',
+
+  devServer: {
+    // stats: 'minimal',
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        pathRewrite: {'^/api' : ''}
+      }
+    }
+  },
+
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
@@ -76,6 +89,7 @@ module.exports = {
       // It is guaranteed to exist because we tweak it in `env.js`
       process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
     ),
+
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
@@ -84,7 +98,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -115,7 +129,7 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -144,7 +158,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
@@ -227,7 +241,7 @@ module.exports = {
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env.stringified),
     // This is necessary to emit hot updates (currently CSS only):
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
     // a plugin that prints an error when you attempt to do this.
     // See https://github.com/facebookincubator/create-react-app/issues/240
