@@ -3,6 +3,7 @@ defmodule ElixirReact.BuildFrontend do
 
   def before_assembly(%Release{} = release, _opts) do
     IO.puts "Building frontend..."
+    File.rm_rf! "#{frontend_dir()}/priv"
     case System.cmd "yarn", ["build", "--color"], cd: frontend_dir() do
 
       # Built frontend ok
@@ -17,12 +18,11 @@ defmodule ElixirReact.BuildFrontend do
     end
   end
 
-  def frontend_dir(), do: "#{File.cwd!}/apps/frontend"
-
   def after_assembly(%Release{} = release, _opts), do: release
   def before_package(%Release{} = release, _opts), do: release
   def after_package(%Release{} = release, _opts), do: release
-
   def after_cleanup(_args, _opts), do: :ok
+
+  defp frontend_dir(), do: "#{File.cwd!}/apps/frontend"
 
 end

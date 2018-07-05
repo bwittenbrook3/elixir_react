@@ -4,6 +4,24 @@ defmodule Frontend.Endpoint do
   plug Plug.RequestId
   plug Plug.Logger
 
+  plug Plug.Static,
+    at: "/", from: :frontend, gzip: false,
+    only: ~w(
+      css
+      fonts
+      index.html
+      images
+      js
+      media
+      favicon.ico
+      robots.txt
+      service-worker.js
+    )
+
+
+  plug Frontend.Router
+
+
   @doc """
   Callback invoked for dynamically configuring the endpoint.
 
